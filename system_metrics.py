@@ -1,6 +1,8 @@
-# This plugin records the running status of configured docker containers by names.
+# This plugin records some useful system metrics in an alert friendly manner.
 #
-# It requires the psutil python library. YOu can install it with pip install psutil
+# It requires the psutil python library. You can install it with
+#
+# pip install psutil
 #
 # Example collectd config
 #<LoadPlugin python>
@@ -43,15 +45,20 @@ def configure(conf):
       collectd.warning('Metric list not set.')
 
 def func_loadavg_per_cpu():
+  """Returns the load average per cpu metric."""
 	
 	load_avg = os.getloadavg()[1] # we get the midterm loadavg
 	cpu_count = psutil.cpu_count()
 	return {'loadavg-per-cpu': load_avg/float(cpu_count)}
 
 def func_memory_usage_percent():
+  """Returns the memory usage by percenatge."""
+
 	return {'memory-usage-percent': psutil.virtual_memory().percent}
 
 def func_disk_usage_percent():
+  """Returns the disk usage percentage for all partitions (mounted disk partitions)."""
+
 	partition_usage = {}
 	for partition in psutil.disk_partitions():
 		mount = None
