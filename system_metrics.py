@@ -1,8 +1,10 @@
 # This plugin records some useful system metrics in an alert friendly manner.
 #
-# It requires the psutil python library. You can install it with
+# It requires the psutil python library or the python-psutil package. You can install it with
 #
 # pip install psutil
+# or
+# apt-get install python-psutil
 #
 # Example collectd config
 #<LoadPlugin python>
@@ -21,6 +23,7 @@
 #</Plugin>
 
 import collectd
+import multiprocessing
 import os
 import psutil
 
@@ -48,7 +51,12 @@ def func_loadavg_per_cpu():
   """Returns the load average per cpu metric."""
 	
 	load_avg = os.getloadavg()[1] # we get the midterm loadavg
-	cpu_count = psutil.cpu_count()
+  cpu_count = None
+  # The psutil pip module seems to have the cpu_count() method while the python-psutil deb package (at least in ubuntu 14.04) does not.
+	if hasattr(psutil, 'cpu_count'):
+		cpu_count = psutil.cpu_count()
+	else:
+		cpu_count = multiprocessing.cpu_count()
 	return {'loadavg-per-cpu': load_avg/float(cpu_count)}
 
 def func_memory_usage_percent():
