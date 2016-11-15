@@ -6,6 +6,7 @@
 # or
 # apt-get install python-psutil
 #
+# This has been tested on ubuntu 14.04
 # Example collectd config
 #<LoadPlugin python>
 #  Globals true

@@ -23,3 +23,6 @@ All the above led me to write a simple python collectd plugin to export the foll
 * disk usage (for all partitions) by percentage.
 
 The only dependency is the psutil python which we use here.
+
+Caveat
+This has been tested only on ubuntu 14.04
